@@ -1,4 +1,4 @@
-package java.movie.service;
+package nicolecade.movie.service;
 
 /*
  * Copyright (c)  [2011-2015] "Neo Technology" / "Graph Aware Ltd."

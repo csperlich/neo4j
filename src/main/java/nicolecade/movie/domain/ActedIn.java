@@ -1,4 +1,4 @@
-package java.movie.domain;
+package nicolecade.movie.domain;
 
 import org.neo4j.ogm.annotation.EndNode;
 import org.neo4j.ogm.annotation.Property;

@@ -1,6 +1,6 @@
-package java.movie.service;
+package nicolecade.movie.service;
 
-import java.movie.domain.Movie;
+import nicolecade.movie.domain.Movie;
 
 public class MoveServiceImpl extends GenericService<Movie>implements MovieService {
 

@@ -1,6 +1,4 @@
-package java.movie.service;
-
-import java.movie.domain.Category;
+package nicolecade.movie.service;
 
 public interface CategoryService extends Service<Category> {
 }

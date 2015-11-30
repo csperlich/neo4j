@@ -1,4 +1,4 @@
-package java.movie.service;
+package nicolecade.movie.service;
 
 public class Category extends GenericService<Category> {
 

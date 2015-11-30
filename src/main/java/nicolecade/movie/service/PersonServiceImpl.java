@@ -1,6 +1,6 @@
-package java.movie.service;
+package nicolecade.movie.service;
 
-import java.movie.domain.Person;
+import nicolecade.movie.domain.Person;
 
 public class PersonServiceImpl extends GenericService<Person>implements PersonService {
 

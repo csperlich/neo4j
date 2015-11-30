@@ -1,4 +1,4 @@
-package java.util.db;
+package nicolecade.util.db;
 
 import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;
@@ -15,7 +15,7 @@ import org.neo4j.ogm.session.SessionFactory;
  */
 public class Neo4jSessionFactory {
 	private static Neo4jSessionFactory factory = new Neo4jSessionFactory();
-	private final static SessionFactory sessionFactory = new SessionFactory("movie.domain");
+	private final static SessionFactory sessionFactory = new SessionFactory("project.movie.domain");
 
 	public static Neo4jSessionFactory getInstance() {
 		return factory;

@@ -1,9 +1,9 @@
-package java.movie.service;
+package nicolecade.movie.service;
 
 import org.neo4j.ogm.session.Session;
 
-import java.movie.domain.DomainObject;
-import java.util.db.Neo4jSessionFactory;
+import nicolecade.movie.domain.DomainObject;
+import nicolecade.util.db.Neo4jSessionFactory;
 
 /*
  * Copyright (c)  [2011-2015] "Neo Technology" / "Graph Aware Ltd."
