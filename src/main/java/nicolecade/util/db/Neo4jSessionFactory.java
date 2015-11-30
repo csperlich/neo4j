@@ -14,8 +14,11 @@ import org.neo4j.ogm.session.SessionFactory;
  *
  */
 public class Neo4jSessionFactory {
+
 	private static Neo4jSessionFactory factory = new Neo4jSessionFactory();
-	private final static SessionFactory sessionFactory = new SessionFactory("project.movie.domain");
+	private static final String PASSWORD = "neo4j";
+	private final static SessionFactory sessionFactory = new SessionFactory("nicolecade.movie.domain");
+	private static final String USERNAME = "neo4j";
 
 	public static Neo4jSessionFactory getInstance() {
 		return factory;
@@ -25,6 +28,6 @@ public class Neo4jSessionFactory {
 	}
 
 	public Session getNeo4jSession() {
-		return sessionFactory.openSession("http://localhost:7474");
+		return sessionFactory.openSession("http://localhost:7474", USERNAME, PASSWORD);
 	}
 }
