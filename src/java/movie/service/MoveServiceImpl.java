@@ -1,6 +1,6 @@
-package java.school.service;
+package java.movie.service;
 
-import java.school.domain.Movie;
+import java.movie.domain.Movie;
 
 public class MoveServiceImpl extends GenericService<Movie>implements MovieService {
 

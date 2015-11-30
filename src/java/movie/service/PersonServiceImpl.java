@@ -1,6 +1,6 @@
-package java.school.service;
+package java.movie.service;
 
-import java.school.domain.Person;
+import java.movie.domain.Person;
 
 public class PersonServiceImpl extends GenericService<Person>implements PersonService {
 

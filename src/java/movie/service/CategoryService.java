@@ -1,6 +1,6 @@
-package java.school.service;
+package java.movie.service;
 
-import java.school.domain.Category;
+import java.movie.domain.Category;
 
 public interface CategoryService extends Service<Category> {
 }

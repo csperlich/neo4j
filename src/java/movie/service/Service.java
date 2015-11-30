@@ -1,4 +1,4 @@
-package java.school.service;
+package java.movie.service;
 
 /*
  * Copyright (c)  [2011-2015] "Neo Technology" / "Graph Aware Ltd."

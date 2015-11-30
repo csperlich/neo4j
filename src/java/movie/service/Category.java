@@ -1,4 +1,4 @@
-package java.school.service;
+package java.movie.service;
 
 public class Category extends GenericService<Category> {
 

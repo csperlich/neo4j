@@ -1,8 +1,8 @@
-package java.school.service;
+package java.movie.service;
 
 import org.neo4j.ogm.session.Session;
 
-import java.school.domain.DomainObject;
+import java.movie.domain.DomainObject;
 import java.util.db.Neo4jSessionFactory;
 
 /*
