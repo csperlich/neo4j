@@ -3,8 +3,15 @@ package nicolecade.movie.domain;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 @NodeEntity
 public abstract class DomainObject {
+	public static final String DATE_FORMAT = "yyyy-MM-DD";
+	public final static DateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
+
 	@GraphId
 	private Long id;
 

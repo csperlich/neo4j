@@ -1,11 +1,9 @@
 package nicolecade.controller;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
+import nicolecade.movie.domain.DomainObject;
 import nicolecade.movie.domain.Person;
 import nicolecade.movie.service.PersonServiceImpl;
 import nicolecade.util.io.UserInput;
@@ -21,8 +19,8 @@ public enum ActionEnum implements Action {
 			boolean badDate = true;
 			while (badDate) {
 				try {
-					System.out.print("Enter Birthday (\"yyyy-MM-dd\"): ");
-					birthday = dateFormatter.parse(UserInput.singleton().getNextLine());
+					System.out.print("Enter Birthday (" + DomainObject.DATE_FORMAT + "): ");
+					birthday = DomainObject.dateFormatter.parse(UserInput.singleton().getNextLine());
 					badDate = false;
 				} catch (final ParseException e) {
 					System.out.println("Bad date, try again.");
@@ -31,6 +29,7 @@ public enum ActionEnum implements Action {
 			final Person person = new Person();
 			person.setName(name);
 			person.setBirthday(birthday);
+
 			final PersonServiceImpl personService = new PersonServiceImpl();
 			personService.createOrUpdate(person);
 		}
@@ -43,7 +42,5 @@ public enum ActionEnum implements Action {
 		}
 
 	};
-
-	private static DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
 }
