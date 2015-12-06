@@ -23,7 +23,7 @@ public class MenuNavigator {
 		System.out.println();
 	}
 
-	public void run() {
+	public void runTheApp() {
 
 		this.displayWelcomeMessage();
 
