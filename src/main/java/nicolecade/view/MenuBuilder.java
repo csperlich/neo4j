@@ -101,6 +101,7 @@ public class MenuBuilder {
 		MANAGER_MENU = MenuBuilder.singleton().new Menu("MANAGE DATABASE", Message.MENU_DEFAULT_MESSAGE);
 		ArrayList<MenuOption> mgmtMenuOptions = new ArrayList<>();
 		mgmtMenuOptions.add(new MenuOption("Populate database", ActionEnum.POPULATE_DB, MANAGER_MENU));
+		mgmtMenuOptions.add(new MenuOption("Empty database", ActionEnum.DROP_ALL_DB, MANAGER_MENU));
 		mgmtMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MANAGER_MENU));
 		
 		MANAGER_MENU.addOptionsToMenu(mgmtMenuOptions);

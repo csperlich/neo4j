@@ -2,7 +2,10 @@ package nicolecade.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import org.neo4j.ogm.session.Session;
 
 import nicolecade.recipe.domain.Category;
 import nicolecade.recipe.domain.Ingredient;
@@ -14,12 +17,16 @@ import nicolecade.recipe.service.IngredientService;
 import nicolecade.recipe.service.RecipeService;
 import nicolecade.recipe.service.ReviewService;
 import nicolecade.recipe.service.UserService;
+import nicolecade.util.db.Neo4jSessionFactory;
 
 public enum ActionEnum implements Action {
 	
 	POPULATE_DB {
 		@Override
 		public void execute() {
+			
+			System.out.println("Populating...");
+			System.out.println();
 			
 			ArrayList<User> users = new ArrayList<User>();
 			ArrayList<Category> categories = new ArrayList<Category>();
@@ -60,14 +67,17 @@ public enum ActionEnum implements Action {
 			Ingredient biBimBopSauce = addIngredient(ingredients, seasonings, "Bi Bim Bop sauce");
 			Ingredient zucchini = addIngredient(ingredients, produce, "Zucchini");
 			
-			Review potatoReview1 = addReview(reviews, celeste, "So light and fluffy! This is the best way to make mashed potatoes.");
-			Review potatoReview2 = addReview(reviews, healthy, "Ugh, I can feel my arteries clogging.");
-			Review yogurtReview1 = addReview(reviews, nicole, "Who knew you could make new yogurt from old yogurt?");
-			Review mattarPaneerReview1 = addReview(reviews, krish, "Very authentic!");
-			Review mattarPaneerReview2 = addReview(reviews, healthy, "I like that it's vegetarian.");
-			Review mattarPaneerReview3 = addReview(reviews, celeste, "Too spicy for me.");
-			Review biBimBopReview1 = addReview(reviews, healthy, "This is actually pretty good.");
-			Review biBimBopReview2 = addReview(reviews, nicole, "Rice + egg = :)");
+			final boolean LIKE = true;
+			final boolean DISLIKE = false;
+
+			Review potatoReview1 = addReview(reviews, celeste, "So light and fluffy! This is the best way to make mashed potatoes.", LIKE);
+			Review potatoReview2 = addReview(reviews, healthy, "Ugh, I can feel my arteries clogging.", DISLIKE);
+			Review yogurtReview1 = addReview(reviews, nicole, "Who knew you could make new yogurt from old yogurt?", LIKE);
+			Review mattarPaneerReview1 = addReview(reviews, krish, "Very authentic!", LIKE);
+			Review mattarPaneerReview2 = addReview(reviews, healthy, "I like that it's vegetarian.", LIKE);
+			Review mattarPaneerReview3 = addReview(reviews, celeste, "Too spicy for me.", DISLIKE);
+			Review biBimBopReview1 = addReview(reviews, healthy, "This is actually pretty good.", LIKE);
+			Review biBimBopReview2 = addReview(reviews, nicole, "Rice + egg = :)", LIKE);
 			
 			addRecipe(recipes, nicole, "Mashed Potatoes",
 					Arrays.asList(potatoes, butter, salt, pepper, milk),
@@ -106,6 +116,9 @@ public enum ActionEnum implements Action {
 			for (Recipe recipe : recipes) {
 				recipeService.createOrUpdate(recipe);
 			}
+			
+			System.out.println();
+			System.out.println("Database populated!");
 		}
 
 		private Recipe addRecipe(ArrayList<Recipe> recipes, User contributor, String title, List<Ingredient> ingredients,
@@ -119,7 +132,7 @@ public enum ActionEnum implements Action {
 			return mashedPotatoes;
 		}
 
-		private Review addReview(ArrayList<Review> reviews, User user, String comment) {
+		private Review addReview(ArrayList<Review> reviews, User user, String comment, boolean likedIt) {
 			Review potatoReview1 = new Review();
 			potatoReview1.setComment(comment);
 			potatoReview1.setReviewer(user);
@@ -147,6 +160,19 @@ public enum ActionEnum implements Action {
 			nicole.setUsername(username);
 			users.add(nicole);
 			return nicole;
+		}
+	},
+	DROP_ALL_DB {
+		@Override
+		public void execute() {
+			System.out.println("Emptying database...");
+			System.out.println();
+			
+			Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
+			session.query("MATCH (n) DETACH DELETE n", Collections.<String, Object> emptyMap());
+			
+			System.out.println();
+			System.out.println("Database empty.");
 		}
 	},
 	EXIT_ACTION {

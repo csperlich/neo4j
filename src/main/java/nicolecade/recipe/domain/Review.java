@@ -13,9 +13,8 @@ public class Review extends DomainObject {
 	@Property(name = "comment")
 	private String comment;
 	
-	@Property(name = "date")
-	@DateString(DATE_FORMAT)
-	private Date date;
+	@Property(name = "likedIt")
+	private boolean likedIt;
 	
 	@Relationship(type = "LEFT_BY", direction = Relationship.OUTGOING)
 	private User reviewer;
@@ -28,12 +27,12 @@ public class Review extends DomainObject {
 		return comment;
 	}
 	
-	public void setDate(Date date) {
-		this.date = date;
+	public void setLikedIt(boolean likedIt) {
+		this.likedIt = likedIt;
 	}
 	
-	public Date getDate() {
-		return date;
+	public boolean getLikedIt() {
+		return likedIt;
 	}
 	
 	public void setReviewer(User reviewer) {
