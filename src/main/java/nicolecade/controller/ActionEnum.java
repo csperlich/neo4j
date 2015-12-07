@@ -219,6 +219,31 @@ public enum ActionEnum implements Action {
 				System.out.println("Welcome " + user.getUsername());
 			}
 		}
+	},
+	USER_REGISTRATION {
+
+		@Override
+		public void execute() {
+			final UserInput input = UserInput.singleton();
+
+			System.out.println("Enter a username");
+			final String username = input.getNextLine();
+
+			System.out.println("Enter password");
+			final String password = input.getNextLine();
+
+			final UserService service = new UserService();
+			final User user = service.register(username, password);
+
+			if (user == null) {
+				System.out.println("username " + username + " is taken");
+				MenuSession.singleton().setFailFlag();
+			} else {
+				MenuSession.singleton().setUser(user);
+				System.out.println("Welcome " + user.getUsername());
+			}
+		}
+
 	};
 
 }

@@ -105,6 +105,7 @@ public class MenuBuilder {
 		MAIN_MENU = MenuBuilder.singleton().new Menu("MAIN MENU", Message.MENU_DEFAULT_MESSAGE);
 		final ArrayList<MenuOption> mainMenuOptions = new ArrayList<>();
 		mainMenuOptions.add(new MenuOption("LOGIN", ActionEnum.USER_LOGIN, this.userMenu()));
+		mainMenuOptions.add(new MenuOption("REGISTER", ActionEnum.USER_REGISTRATION, this.userMenu()));
 		mainMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MAIN_MENU));
 
 		MAIN_MENU.addOptionsToMenu(mainMenuOptions);
@@ -122,7 +123,7 @@ public class MenuBuilder {
 	}
 
 	private void buildUserMenu() {
-		USER_MENU = MenuBuilder.singleton().new Menu("MAIN MENU", Message.MENU_DEFAULT_MESSAGE);
+		USER_MENU = MenuBuilder.singleton().new Menu("USER MENU", Message.MENU_DEFAULT_MESSAGE);
 		final ArrayList<MenuOption> userMenuOptions = new ArrayList<>();
 		userMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MAIN_MENU));
 		userMenuOptions.add(new MenuOption("LOGOUT", ActionEnum.LOGOUT, MAIN_MENU));
