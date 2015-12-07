@@ -1,5 +1,9 @@
 package nicolecade.controller;
 
+import org.neo4j.ogm.session.Session;
+import org.neo4j.ogm.session.Session;
+import org.neo4j.ogm.session.result.Result;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -7,9 +11,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.neo4j.ogm.session.Session;
-import org.neo4j.ogm.session.result.Result;
 
 import nicolecade.recipe.domain.Category;
 import nicolecade.recipe.domain.Ingredient;
@@ -46,27 +47,23 @@ public enum ActionEnum implements Action {
 	FOOD_BUDDY_RECOMMENDATIONS {
 		@Override
 		public void execute() {
-			final Session session = Neo4jSessionFactory.getInstance()
-					.getNeo4jSession();
+			final Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
 
 			final String username = "narruda";
-			String countCondition = "count (r)";
-			String titleAttribute = "title";
-			String recipeLabel = "f";
+			final String countCondition = "count (r)";
+			final String titleAttribute = "title";
+			final String recipeLabel = "f";
 
 			final Result result = session.query(
 					"match (n:User {username:'" + username
 							+ "'})-[FOOD_BUDDIES]-(m:User)<-[:LEFT_BY]-(r:Review {likedIt:true})<-[:HAS_REVIEW]-("
-							+ recipeLabel + ":Recipe) return " + recipeLabel
-							+ ", " + countCondition,
+							+ recipeLabel + ":Recipe) return " + recipeLabel + ", " + countCondition,
 					Collections.<String, LinkedHashMap> emptyMap());
 
-			LinkedHashMap<String, Integer> recipeToVotesMap = new LinkedHashMap<>();
+			final LinkedHashMap<String, Integer> recipeToVotesMap = new LinkedHashMap<>();
 
-			for (Map<String, Object> row : result) {
-				recipeToVotesMap.put(
-						(String) ((LinkedHashMap) row.get(recipeLabel))
-								.get(titleAttribute),
+			for (final Map<String, Object> row : result) {
+				recipeToVotesMap.put((String) ((LinkedHashMap) row.get(recipeLabel)).get(titleAttribute),
 						(Integer) row.get(countCondition));
 			}
 
@@ -75,22 +72,20 @@ public enum ActionEnum implements Action {
 			System.out.println();
 			System.out.println("    RECIPE                     #LIKES");
 
-			Set<String> recipes = recipeToVotesMap.keySet();
+			final Set<String> recipes = recipeToVotesMap.keySet();
 			Integer currentMostVotes;
 			String currentBestRecipe = "";
 			while (!recipeToVotesMap.isEmpty()) {
 				currentMostVotes = new Integer(-1);
-				for (String thisRecipe : recipes) {
-					Integer thisNumberOfVotes = recipeToVotesMap
-							.get(thisRecipe);
+				for (final String thisRecipe : recipes) {
+					final Integer thisNumberOfVotes = recipeToVotesMap.get(thisRecipe);
 					if (thisNumberOfVotes.compareTo(currentMostVotes) > 0) {
 						currentMostVotes = thisNumberOfVotes;
 						currentBestRecipe = thisRecipe;
 					}
 				}
 				recipeToVotesMap.remove(currentBestRecipe);
-				System.out.printf("%-35s%d\n", currentBestRecipe,
-						currentMostVotes);
+				System.out.printf("%-35s%d\n", currentBestRecipe, currentMostVotes);
 			}
 
 		}
@@ -115,96 +110,93 @@ public enum ActionEnum implements Action {
 			final User celeste = this.addUser(users, "carruda");
 			final User healthy = this.addUser(users, "health_nut", "4444");
 			final User dad = this.addUser(users, "dad_arruda");
+			final User kevin = this.addUser(users, "kevin_baconator");
 			nicole.addFoodBuddy(celeste);
 			nicole.addFoodBuddy(dad);
 			nicole.addFoodBuddy(cade);
 			nicole.addFoodBuddy(krish);
 
-			final Category starches = this.addCategory(categories, "Starches");
-			final Category dairy = this.addCategory(categories,
-					"Dairy products");
-			final Category seasonings = this.addCategory(categories,
-					"Herbs, spices, and seasonings");
-			final Category produce = this.addCategory(categories,
-					"Fruits and vegetables");
+			final Category starches = this.addCategory(categories, "Grains and Starches");
+			final Category dairy = this.addCategory(categories, "Dairy products");
+			final Category seasonings = this.addCategory(categories, "Herbs, spices, and seasonings");
+			final Category produce = this.addCategory(categories, "Fruits and vegetables");
 			final Category protein = this.addCategory(categories, "Protein");
+			final Category sauce = this.addCategory(categories, "Condiments, Oils, and Sauces");
+			final Category pastries = this.addCategory(categories, "Pastries");
 
-			final Ingredient potatoes = this.addIngredient(ingredients,
-					starches, "Potatoes");
+			final Ingredient potatoes = this.addIngredient(ingredients, starches, "Potatoes");
 			potatoes.addToCategory(produce);
-			final Ingredient butter = this.addIngredient(ingredients, dairy,
-					"Butter");
-			final Ingredient salt = this.addIngredient(ingredients, seasonings,
-					"Salt");
-			final Ingredient pepper = this.addIngredient(ingredients,
-					seasonings, "Black pepper");
-			final Ingredient milk = this.addIngredient(ingredients, dairy,
-					"Whole milk");
-			final Ingredient yogurt = this.addIngredient(ingredients, dairy,
-					"Yogurt");
+			final Ingredient butter = this.addIngredient(ingredients, dairy, "Butter");
+			final Ingredient salt = this.addIngredient(ingredients, seasonings, "Salt");
+			final Ingredient pepper = this.addIngredient(ingredients, seasonings, "Black pepper");
+			final Ingredient milk = this.addIngredient(ingredients, dairy, "Whole milk");
+			final Ingredient yogurt = this.addIngredient(ingredients, dairy, "Yogurt");
 			yogurt.addToCategory(protein);
-			final Ingredient tomatoes = this.addIngredient(ingredients, produce,
-					"Tomatoes");
-			final Ingredient peas = this.addIngredient(ingredients, produce,
-					"Peas");
-			final Ingredient onion = this.addIngredient(ingredients, produce,
-					"Onion");
-			final Ingredient cumin = this.addIngredient(ingredients, seasonings,
-					"Cumin");
-			final Ingredient lemon = this.addIngredient(ingredients, produce,
-					"Lemon juice");
-			final Ingredient rice = this.addIngredient(ingredients, starches,
-					"Rice");
-			final Ingredient mushrooms = this.addIngredient(ingredients,
-					produce, "Mushrooms");
-			final Ingredient egg = this.addIngredient(ingredients, protein,
-					"Egg");
+			final Ingredient tomatoes = this.addIngredient(ingredients, produce, "Tomatoes");
+			final Ingredient peas = this.addIngredient(ingredients, produce, "Peas");
+			final Ingredient onion = this.addIngredient(ingredients, produce, "Onion");
+			final Ingredient cumin = this.addIngredient(ingredients, seasonings, "Cumin");
+			final Ingredient lemon = this.addIngredient(ingredients, produce, "Lemon juice");
+			final Ingredient rice = this.addIngredient(ingredients, starches, "Rice");
+			final Ingredient mushrooms = this.addIngredient(ingredients, produce, "Mushrooms");
+			final Ingredient egg = this.addIngredient(ingredients, protein, "Egg");
 			egg.addToCategory(dairy);
-			final Ingredient biBimBopSauce = this.addIngredient(ingredients,
-					seasonings, "Bi Bim Bop sauce");
-			final Ingredient zucchini = this.addIngredient(ingredients, produce,
-					"Zucchini");
+
+			final Ingredient biBimBopSauce = this.addIngredient(ingredients, sauce, "Bi Bim Bop sauce");
+			final Ingredient zucchini = this.addIngredient(ingredients, produce, "Zucchini");
+			final Ingredient bacon = this.addIngredient(ingredients, protein, "Bacon");
+			final Ingredient jalapeno = this.addIngredient(ingredients, produce, "Jalepeno");
+			final Ingredient cheddar = this.addIngredient(ingredients, dairy, "Cheddar Cheese");
+			final Ingredient lettuce = this.addIngredient(ingredients, produce, "Lettuce");
+			final Ingredient tomato = this.addIngredient(ingredients, produce, "Tomato");
+			final Ingredient bread = this.addIngredient(ingredients, starches, "Bread");
+			final Ingredient mayo = this.addIngredient(ingredients, sauce, "Mayonnaise");
+			mayo.addToCategory(dairy);
+			final Ingredient pasta = this.addIngredient(ingredients, starches, "Pasta");
+			final Ingredient oliveOil = this.addIngredient(ingredients, sauce, "Olive Oil");
+			final Ingredient garlic = this.addIngredient(ingredients, produce, "Garlic");
+			final Ingredient dooughnut = this.addIngredient(ingredients, pastries, "Doughnut");
 
 			final boolean LIKE = true;
 			final boolean DISLIKE = false;
 
 			final Review potatoReview1 = this.addReview(reviews, celeste,
-					"So light and fluffy! This is the best way to make mashed potatoes.",
-					LIKE);
-			final Review potatoReview2 = this.addReview(reviews, healthy,
-					"Ugh, I can feel my arteries clogging.", DISLIKE);
-			final Review potatoReview3 = addReview(reviews, cade,
-					"I love potatoes.", LIKE);
+					"So light and fluffy! This is the best way to make mashed potatoes.", LIKE);
+			final Review potatoReview2 = this.addReview(reviews, healthy, "Ugh, I can feel my arteries clogging.",
+					DISLIKE);
+			final Review potatoReview3 = this.addReview(reviews, cade, "I love potatoes.", LIKE);
 			final Review yogurtReview1 = this.addReview(reviews, nicole,
-					"Who knew you could make new yogurt from old yogurt?",
-					LIKE);
-			final Review mattarPaneerReview1 = this.addReview(reviews, krish,
-					"Very authentic!", LIKE);
-			final Review mattarPaneerReview2 = this.addReview(reviews, healthy,
-					"I like that it's vegetarian.", LIKE);
-			final Review mattarPaneerReview3 = this.addReview(reviews, celeste,
-					"Too spicy for me.", DISLIKE);
-			final Review biBimBopReview1 = this.addReview(reviews, healthy,
-					"This is actually pretty good.", LIKE);
-			final Review biBimBopReview2 = this.addReview(reviews, nicole,
-					"Rice + egg = :)", LIKE);
-			final Review biBimBopReview3 = addReview(reviews, celeste, "Yum!",
-					LIKE);
+					"Who knew you could make new yogurt from old yogurt?", LIKE);
+			final Review mattarPaneerReview1 = this.addReview(reviews, krish, "Very authentic!", LIKE);
+			final Review mattarPaneerReview2 = this.addReview(reviews, healthy, "I like that it's vegetarian.", LIKE);
+			final Review mattarPaneerReview3 = this.addReview(reviews, celeste, "Too spicy for me.", DISLIKE);
+			final Review biBimBopReview1 = this.addReview(reviews, healthy, "This is actually pretty good.", LIKE);
+			final Review biBimBopReview2 = this.addReview(reviews, nicole, "Rice + egg = :)", LIKE);
+			final Review biBimBopReview3 = this.addReview(reviews, celeste, "Yum!", LIKE);
+			final Review baconJalapenosReview1 = this.addReview(reviews, healthy, "Not healthy at all!", DISLIKE);
+			final Review baconJalapenosReview2 = this.addReview(reviews, krish, "Yummmm-eee", DISLIKE);
+			final Review baconJalapenosReview3 = this.addReview(reviews, kevin, "yesyesyesyesyesyesyes", LIKE);
+			final Review bltReview1 = this.addReview(reviews, cade, "Simple, yet effective", LIKE);
+			final Review bltReview2 = this.addReview(reviews, celeste, "A classic.", LIKE);
+			final Review baconCarbonaraReview1 = this.addReview(reviews, kevin, "You had me at \"Bacon\"", LIKE);
+			final Review baconDoughnutReview1 = this.addReview(reviews, kevin, "Bacon Doughnuts for President!", LIKE);
 
-			this.addRecipe(recipes, nicole, "Mashed Potatoes",
-					Arrays.asList(potatoes, butter, salt, pepper, milk),
+			this.addRecipe(recipes, nicole, "Mashed Potatoes", Arrays.asList(potatoes, butter, salt, pepper, milk),
 					Arrays.asList(potatoReview1, potatoReview2, potatoReview3));
-			this.addRecipe(recipes, dad, "Homemade Yogurt",
-					Arrays.asList(yogurt, milk), Arrays.asList(yogurtReview1));
-			this.addRecipe(recipes, dad, "Mattar Paneer",
-					Arrays.asList(milk, lemon, tomatoes, onion, peas, cumin),
-					Arrays.asList(mattarPaneerReview1, mattarPaneerReview2,
-							mattarPaneerReview3));
-			this.addRecipe(recipes, cade, "Bi Bim Bop",
-					Arrays.asList(rice, mushrooms, egg, zucchini,
-							biBimBopSauce),
-					Arrays.asList(biBimBopReview1, biBimBopReview2,
-							biBimBopReview3));
+			this.addRecipe(recipes, dad, "Homemade Yogurt", Arrays.asList(yogurt, milk), Arrays.asList(yogurtReview1));
+			this.addRecipe(recipes, dad, "Mattar Paneer", Arrays.asList(milk, lemon, tomatoes, onion, peas, cumin),
+					Arrays.asList(mattarPaneerReview1, mattarPaneerReview2, mattarPaneerReview3));
+			this.addRecipe(recipes, cade, "Bi Bim Bop", Arrays.asList(rice, mushrooms, egg, zucchini, biBimBopSauce),
+					Arrays.asList(biBimBopReview1, biBimBopReview2, biBimBopReview3));
+			this.addRecipe(recipes, cade, "Bacon-Wrapped Cheese-Stuffed Jalepenos",
+					Arrays.asList(bacon, cheddar, jalapeno),
+					Arrays.asList(baconJalapenosReview1, baconJalapenosReview2, baconJalapenosReview3));
+			this.addRecipe(recipes, kevin, "BLT", Arrays.asList(bacon, lettuce, tomato, bread, mayo),
+					Arrays.asList(bltReview1, bltReview2));
+			this.addRecipe(recipes, dad, "Bacon Carbonara", Arrays.asList(pasta, egg, bacon, oliveOil, garlic),
+					Arrays.asList(baconCarbonaraReview1, baconJalapenosReview2));
+			this.addRecipe(recipes, celeste, "Glazed Donut with Bacon", Arrays.asList(dooughnut, bacon),
+					Arrays.asList(baconDoughnutReview1));
 
 			final UserService userService = new UserService();
 			for (final User user : users) {
@@ -235,9 +227,8 @@ public enum ActionEnum implements Action {
 			System.out.println("Database populated!");
 		}
 
-		private Recipe addRecipe(ArrayList<Recipe> recipes, User contributor,
-				String title, List<Ingredient> ingredients,
-				List<Review> reviews) {
+		private Recipe addRecipe(ArrayList<Recipe> recipes, User contributor, String title,
+				List<Ingredient> ingredients, List<Review> reviews) {
 			final Recipe recipe = new Recipe();
 			recipe.setTitle(title);
 			recipe.setContributor(contributor);
@@ -247,18 +238,17 @@ public enum ActionEnum implements Action {
 			return recipe;
 		}
 
-		private Review addReview(ArrayList<Review> reviews, User user,
-				String comment, boolean likedIt) {
+		private Review addReview(ArrayList<Review> reviews, User user, String comment, boolean likedIt) {
 			final Review review = new Review();
 			review.setComment(comment);
 			review.setReviewer(user);
 			review.setLikedIt(likedIt);
 			reviews.add(review);
 			return review;
+
 		}
 
-		private Ingredient addIngredient(ArrayList<Ingredient> ingredients,
-				Category category, String name) {
+		private Ingredient addIngredient(ArrayList<Ingredient> ingredients, Category category, String name) {
 			final Ingredient ingredient = new Ingredient();
 			ingredient.setName(name);
 			ingredient.addToCategory(category);
@@ -266,8 +256,7 @@ public enum ActionEnum implements Action {
 			return ingredient;
 		}
 
-		private Category addCategory(ArrayList<Category> categories,
-				String description) {
+		private Category addCategory(ArrayList<Category> categories, String description) {
 			final Category category = new Category();
 			category.setDescription(description);
 			categories.add(category);
@@ -295,10 +284,8 @@ public enum ActionEnum implements Action {
 			System.out.println("Emptying database...");
 			System.out.println();
 
-			final Session session = Neo4jSessionFactory.getInstance()
-					.getNeo4jSession();
-			session.query("MATCH (n) DETACH DELETE n",
-					Collections.<String, Object> emptyMap());
+			final Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
+			session.query("MATCH (n) DETACH DELETE n", Collections.<String, Object> emptyMap());
 
 			System.out.println();
 			System.out.println("Database empty.");
