@@ -90,7 +90,46 @@ public enum ActionEnum implements Action {
 
 		}
 	},
+	GET_BACON_PATH {
 
+		@Override
+		public void execute() {
+			final UserService service = new UserService();
+
+			// find the baconator
+			final User baconator = service.mostLikesForRecipeWithIngredient("Bacon");
+
+			// find the bacon path, remember, always follow the bacon
+			final List<String> baconPath = service.getShortestPath(MenuSession.singleton().getUser().getUsername(),
+					baconator.getUsername());
+
+			final String sessionUsername = MenuSession.singleton().getUser().getUsername();
+			boolean theBaconatorIsYou = false;
+			System.out.print("The baconator is ");
+			if (baconator.getUsername().equals(sessionUsername)) {
+				theBaconatorIsYou = true;
+				System.out.print(" YOU ");
+			} else {
+				System.out.print(baconator.getUsername());
+			}
+
+			if (!theBaconatorIsYou) {
+				System.out.println();
+				if (baconPath.size() > 0) {
+					System.out.println("Distance to the baconator = " + baconPath.size());
+					System.out.print("Path to the baconator: ");
+					System.out.print(baconPath.get(0));
+					for (int i = 1; i < baconPath.size(); i++) {
+						System.out.print(" --> " + baconPath.get(i));
+					}
+				} else {
+					System.out.print("You are not connected to the baconator");
+				}
+			}
+			System.out.println();
+		}
+
+	},
 	POPULATE_DB {
 		@Override
 		public void execute() {
@@ -115,6 +154,9 @@ public enum ActionEnum implements Action {
 			nicole.addFoodBuddy(dad);
 			nicole.addFoodBuddy(cade);
 			nicole.addFoodBuddy(krish);
+			cade.addFoodBuddy(krish);
+			krish.addFoodBuddy(dad);
+			dad.addFoodBuddy(kevin);
 
 			final Category starches = this.addCategory(categories, "Grains and Starches");
 			final Category dairy = this.addCategory(categories, "Dairy products");

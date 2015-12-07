@@ -34,8 +34,7 @@ public class MenuBuilder {
 			System.out.println(this.title);
 
 			for (final MenuOption option : this.options) {
-				System.out.println(" " + option.getOptionNumber() + " "
-						+ option.getOptionText());
+				System.out.println(" " + option.getOptionNumber() + " " + option.getOptionText());
 			}
 			System.out.println();
 			System.out.print(this.message);
@@ -52,10 +51,8 @@ public class MenuBuilder {
 			return pickedOption;
 		}
 
-		public Menu performActionByOptionNumberReturnNextMenu(
-				final int optionNumber) {
-			final MenuOption pickedOption = this
-					.findOptionByNumber(optionNumber);
+		public Menu performActionByOptionNumberReturnNextMenu(final int optionNumber) {
+			final MenuOption pickedOption = this.findOptionByNumber(optionNumber);
 
 			pickedOption.performAction();
 			if (MenuSession.singleton().actionFailed()) {
@@ -105,29 +102,22 @@ public class MenuBuilder {
 	}
 
 	private void buildMainMenu() {
-		MAIN_MENU = MenuBuilder.singleton().new Menu("MAIN MENU",
-				Message.MENU_DEFAULT_MESSAGE);
+		MAIN_MENU = MenuBuilder.singleton().new Menu("MAIN MENU", Message.MENU_DEFAULT_MESSAGE);
 		final ArrayList<MenuOption> mainMenuOptions = new ArrayList<>();
-		mainMenuOptions.add(new MenuOption("LOGIN", ActionEnum.USER_LOGIN,
-				this.userMenu()));
+		mainMenuOptions.add(new MenuOption("LOGIN", ActionEnum.USER_LOGIN, this.userMenu()));
 		mainMenuOptions.add(new MenuOption("REGISTER", ActionEnum.USER_REGISTRATION, this.userMenu()));
-		mainMenuOptions
-				.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MAIN_MENU));
+		mainMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MAIN_MENU));
 
 		MAIN_MENU.addOptionsToMenu(mainMenuOptions);
 	}
 
 	private void buildManagerMenu() {
-		MANAGER_MENU = MenuBuilder.singleton().new Menu("MANAGE DATABASE",
-				Message.MENU_DEFAULT_MESSAGE);
+		MANAGER_MENU = MenuBuilder.singleton().new Menu("MANAGE DATABASE", Message.MENU_DEFAULT_MESSAGE);
 		final ArrayList<MenuOption> mgmtMenuOptions = new ArrayList<>();
 
-		mgmtMenuOptions.add(new MenuOption("Populate database",
-				ActionEnum.POPULATE_DB, MANAGER_MENU));
-		mgmtMenuOptions.add(new MenuOption("Empty database",
-				ActionEnum.DROP_ALL_DB, MANAGER_MENU));
-		mgmtMenuOptions.add(
-				new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MANAGER_MENU));
+		mgmtMenuOptions.add(new MenuOption("Populate database", ActionEnum.POPULATE_DB, MANAGER_MENU));
+		mgmtMenuOptions.add(new MenuOption("Empty database", ActionEnum.DROP_ALL_DB, MANAGER_MENU));
+		mgmtMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MANAGER_MENU));
 
 		MANAGER_MENU.addOptionsToMenu(mgmtMenuOptions);
 	}
@@ -135,12 +125,10 @@ public class MenuBuilder {
 	private void buildUserMenu() {
 		USER_MENU = MenuBuilder.singleton().new Menu("USER MENU", Message.MENU_DEFAULT_MESSAGE);
 		final ArrayList<MenuOption> userMenuOptions = new ArrayList<>();
-		userMenuOptions.add(new MenuOption("See recommendations",
-				ActionEnum.FOOD_BUDDY_RECOMMENDATIONS, MAIN_MENU));
-		userMenuOptions
-				.add(new MenuOption("LOGOUT", ActionEnum.LOGOUT, MAIN_MENU));
-		userMenuOptions
-				.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MAIN_MENU));
+		userMenuOptions.add(new MenuOption("See recommendations", ActionEnum.FOOD_BUDDY_RECOMMENDATIONS, USER_MENU));
+		userMenuOptions.add(new MenuOption("Get Bacon Path", ActionEnum.GET_BACON_PATH, USER_MENU));
+		userMenuOptions.add(new MenuOption("LOGOUT", ActionEnum.LOGOUT, MAIN_MENU));
+		userMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MAIN_MENU));
 
 		USER_MENU.addOptionsToMenu(userMenuOptions);
 
