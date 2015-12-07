@@ -1,11 +1,11 @@
 package nicolecade.controller;
 
+import org.neo4j.ogm.session.Session;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import org.neo4j.ogm.session.Session;
 
 import nicolecade.recipe.domain.Category;
 import nicolecade.recipe.domain.Ingredient;
@@ -18,112 +18,126 @@ import nicolecade.recipe.service.RecipeService;
 import nicolecade.recipe.service.ReviewService;
 import nicolecade.recipe.service.UserService;
 import nicolecade.util.db.Neo4jSessionFactory;
+import nicolecade.util.io.UserInput;
+import nicolecade.view.MenuSession;
 
 public enum ActionEnum implements Action {
-	
+
+	EXIT_ACTION {
+		@Override
+		public void execute() {
+			System.out.println("Good bye!");
+			System.exit(0);
+		}
+	},
+	LOGOUT {
+		@Override
+		public void execute() {
+			MenuSession.singleton().setUser(null);
+		}
+
+	},
 	POPULATE_DB {
 		@Override
 		public void execute() {
-			
+
 			System.out.println("Populating...");
 			System.out.println();
-			
-			ArrayList<User> users = new ArrayList<User>();
-			ArrayList<Category> categories = new ArrayList<Category>();
-			ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-			ArrayList<Review> reviews = new ArrayList<Review>();
-			ArrayList<Recipe> recipes = new ArrayList<Recipe>();
-			
-			User nicole = addUser(users, "narruda");
-			User cade = addUser(users, "csperlich");
-			User krish = addUser(users, "knarayanan");
-			User celeste = addUser(users, "carruda");
-			User healthy = addUser(users, "health_nut");
-			User dad = addUser(users, "dad_arruda");
 
-			Category starches = addCategory(categories, "Starches");
-			Category dairy = addCategory(categories, "Dairy products");
-			Category seasonings = addCategory(categories, "Herbs, spices, and seasonings");			
-			Category produce = addCategory(categories, "Fruits and vegetables");
-			Category protein = addCategory(categories, "Protein");
+			final ArrayList<User> users = new ArrayList<User>();
+			final ArrayList<Category> categories = new ArrayList<Category>();
+			final ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+			final ArrayList<Review> reviews = new ArrayList<Review>();
+			final ArrayList<Recipe> recipes = new ArrayList<Recipe>();
 
-			Ingredient potatoes = addIngredient(ingredients, starches, "Potatoes");
+			final User nicole = this.addUser(users, "narruda");
+			final User cade = this.addUser(users, "csperlich");
+			final User krish = this.addUser(users, "knarayanan");
+			final User celeste = this.addUser(users, "carruda");
+			final User healthy = this.addUser(users, "health_nut", "4444");
+			final User dad = this.addUser(users, "dad_arruda");
+
+			final Category starches = this.addCategory(categories, "Starches");
+			final Category dairy = this.addCategory(categories, "Dairy products");
+			final Category seasonings = this.addCategory(categories, "Herbs, spices, and seasonings");
+			final Category produce = this.addCategory(categories, "Fruits and vegetables");
+			final Category protein = this.addCategory(categories, "Protein");
+
+			final Ingredient potatoes = this.addIngredient(ingredients, starches, "Potatoes");
 			potatoes.addToCategory(produce);
-			Ingredient butter = addIngredient(ingredients, dairy, "Butter");
-			Ingredient salt = addIngredient(ingredients, seasonings, "Salt");
-			Ingredient pepper = addIngredient(ingredients, seasonings, "Black pepper");
-			Ingredient milk = addIngredient(ingredients, dairy, "Whole milk");
-			Ingredient yogurt = addIngredient(ingredients, dairy, "Yogurt");
+			final Ingredient butter = this.addIngredient(ingredients, dairy, "Butter");
+			final Ingredient salt = this.addIngredient(ingredients, seasonings, "Salt");
+			final Ingredient pepper = this.addIngredient(ingredients, seasonings, "Black pepper");
+			final Ingredient milk = this.addIngredient(ingredients, dairy, "Whole milk");
+			final Ingredient yogurt = this.addIngredient(ingredients, dairy, "Yogurt");
 			yogurt.addToCategory(protein);
-			Ingredient tomatoes = addIngredient(ingredients, produce, "Tomatoes");
-			Ingredient peas = addIngredient(ingredients, produce, "Peas");
-			Ingredient onion = addIngredient(ingredients, produce, "Onion");
-			Ingredient cumin = addIngredient(ingredients, seasonings, "Cumin");
-			Ingredient lemon = addIngredient(ingredients, produce, "Lemon juice");
-			Ingredient rice = addIngredient(ingredients, starches, "Rice");
-			Ingredient mushrooms = addIngredient(ingredients, produce, "Mushrooms");
-			Ingredient egg = addIngredient(ingredients, protein, "Egg");
+			final Ingredient tomatoes = this.addIngredient(ingredients, produce, "Tomatoes");
+			final Ingredient peas = this.addIngredient(ingredients, produce, "Peas");
+			final Ingredient onion = this.addIngredient(ingredients, produce, "Onion");
+			final Ingredient cumin = this.addIngredient(ingredients, seasonings, "Cumin");
+			final Ingredient lemon = this.addIngredient(ingredients, produce, "Lemon juice");
+			final Ingredient rice = this.addIngredient(ingredients, starches, "Rice");
+			final Ingredient mushrooms = this.addIngredient(ingredients, produce, "Mushrooms");
+			final Ingredient egg = this.addIngredient(ingredients, protein, "Egg");
 			egg.addToCategory(dairy);
-			Ingredient biBimBopSauce = addIngredient(ingredients, seasonings, "Bi Bim Bop sauce");
-			Ingredient zucchini = addIngredient(ingredients, produce, "Zucchini");
-			
+			final Ingredient biBimBopSauce = this.addIngredient(ingredients, seasonings, "Bi Bim Bop sauce");
+			final Ingredient zucchini = this.addIngredient(ingredients, produce, "Zucchini");
+
 			final boolean LIKE = true;
 			final boolean DISLIKE = false;
 
-			Review potatoReview1 = addReview(reviews, celeste, "So light and fluffy! This is the best way to make mashed potatoes.", LIKE);
-			Review potatoReview2 = addReview(reviews, healthy, "Ugh, I can feel my arteries clogging.", DISLIKE);
-			Review yogurtReview1 = addReview(reviews, nicole, "Who knew you could make new yogurt from old yogurt?", LIKE);
-			Review mattarPaneerReview1 = addReview(reviews, krish, "Very authentic!", LIKE);
-			Review mattarPaneerReview2 = addReview(reviews, healthy, "I like that it's vegetarian.", LIKE);
-			Review mattarPaneerReview3 = addReview(reviews, celeste, "Too spicy for me.", DISLIKE);
-			Review biBimBopReview1 = addReview(reviews, healthy, "This is actually pretty good.", LIKE);
-			Review biBimBopReview2 = addReview(reviews, nicole, "Rice + egg = :)", LIKE);
-			
-			addRecipe(recipes, nicole, "Mashed Potatoes",
-					Arrays.asList(potatoes, butter, salt, pepper, milk),
+			final Review potatoReview1 = this.addReview(reviews, celeste,
+					"So light and fluffy! This is the best way to make mashed potatoes.", LIKE);
+			final Review potatoReview2 = this.addReview(reviews, healthy, "Ugh, I can feel my arteries clogging.",
+					DISLIKE);
+			final Review yogurtReview1 = this.addReview(reviews, nicole,
+					"Who knew you could make new yogurt from old yogurt?", LIKE);
+			final Review mattarPaneerReview1 = this.addReview(reviews, krish, "Very authentic!", LIKE);
+			final Review mattarPaneerReview2 = this.addReview(reviews, healthy, "I like that it's vegetarian.", LIKE);
+			final Review mattarPaneerReview3 = this.addReview(reviews, celeste, "Too spicy for me.", DISLIKE);
+			final Review biBimBopReview1 = this.addReview(reviews, healthy, "This is actually pretty good.", LIKE);
+			final Review biBimBopReview2 = this.addReview(reviews, nicole, "Rice + egg = :)", LIKE);
+
+			this.addRecipe(recipes, nicole, "Mashed Potatoes", Arrays.asList(potatoes, butter, salt, pepper, milk),
 					Arrays.asList(potatoReview1, potatoReview2));
-			addRecipe(recipes, dad, "Homemade Yogurt",
-					Arrays.asList(yogurt, milk),
-					Arrays.asList(yogurtReview1));
-			addRecipe(recipes, dad, "Mattar Paneer",
-					Arrays.asList(milk, lemon, tomatoes, onion, peas, cumin),
+			this.addRecipe(recipes, dad, "Homemade Yogurt", Arrays.asList(yogurt, milk), Arrays.asList(yogurtReview1));
+			this.addRecipe(recipes, dad, "Mattar Paneer", Arrays.asList(milk, lemon, tomatoes, onion, peas, cumin),
 					Arrays.asList(mattarPaneerReview1, mattarPaneerReview2, mattarPaneerReview3));
-			addRecipe(recipes, cade, "Bi Bim Bop", 
-					Arrays.asList(rice, mushrooms, egg, zucchini, biBimBopSauce),
+			this.addRecipe(recipes, cade, "Bi Bim Bop", Arrays.asList(rice, mushrooms, egg, zucchini, biBimBopSauce),
 					Arrays.asList(biBimBopReview1, biBimBopReview2));
-			
-			UserService userService = new UserService();
-			for (User user : users) {
+
+			final UserService userService = new UserService();
+			for (final User user : users) {
 				userService.createOrUpdate(user);
 			}
-			
-			CategoryService categoryService = new CategoryService();
-			for (Category category : categories) {
+
+			final CategoryService categoryService = new CategoryService();
+			for (final Category category : categories) {
 				categoryService.createOrUpdate(category);
 			}
-			
-			IngredientService ingredientService = new IngredientService();
-			for (Ingredient ingredient : ingredients) {
+
+			final IngredientService ingredientService = new IngredientService();
+			for (final Ingredient ingredient : ingredients) {
 				ingredientService.createOrUpdate(ingredient);
 			}
-			
-			ReviewService reviewService = new ReviewService();
-			for (Review review : reviews) {
+
+			final ReviewService reviewService = new ReviewService();
+			for (final Review review : reviews) {
 				reviewService.createOrUpdate(review);
 			}
-			
-			RecipeService recipeService = new RecipeService();
-			for (Recipe recipe : recipes) {
+
+			final RecipeService recipeService = new RecipeService();
+			for (final Recipe recipe : recipes) {
 				recipeService.createOrUpdate(recipe);
 			}
-			
+
 			System.out.println();
 			System.out.println("Database populated!");
 		}
 
-		private Recipe addRecipe(ArrayList<Recipe> recipes, User contributor, String title, List<Ingredient> ingredients,
-				List<Review> reviews) {
-			Recipe mashedPotatoes = new Recipe();
+		private Recipe addRecipe(ArrayList<Recipe> recipes, User contributor, String title,
+				List<Ingredient> ingredients, List<Review> reviews) {
+			final Recipe mashedPotatoes = new Recipe();
 			mashedPotatoes.setTitle(title);
 			mashedPotatoes.setContributor(contributor);
 			mashedPotatoes.setIngredients(ingredients);
@@ -133,7 +147,7 @@ public enum ActionEnum implements Action {
 		}
 
 		private Review addReview(ArrayList<Review> reviews, User user, String comment, boolean likedIt) {
-			Review potatoReview1 = new Review();
+			final Review potatoReview1 = new Review();
 			potatoReview1.setComment(comment);
 			potatoReview1.setReviewer(user);
 			reviews.add(potatoReview1);
@@ -141,7 +155,7 @@ public enum ActionEnum implements Action {
 		}
 
 		private Ingredient addIngredient(ArrayList<Ingredient> ingredients, Category category, String name) {
-			Ingredient potatoes = new Ingredient();
+			final Ingredient potatoes = new Ingredient();
 			potatoes.setName(name);
 			potatoes.addToCategory(category);
 			ingredients.add(potatoes);
@@ -149,15 +163,22 @@ public enum ActionEnum implements Action {
 		}
 
 		private Category addCategory(ArrayList<Category> categories, String description) {
-			Category starches = new Category();
+			final Category starches = new Category();
 			starches.setDescription(description);
 			categories.add(starches);
 			return starches;
 		}
 
-		private User addUser(ArrayList<User> users, String username) {
-			User nicole = new User();
-			nicole.setUsername(username);
+		private User addUser(ArrayList<User> users, String... userInfo) {
+			final User nicole = new User();
+			nicole.setUsername(userInfo[0]);
+
+			if (userInfo.length == 2) {
+				nicole.setPassword(userInfo[1]);
+			} else {
+				nicole.setPassword("1234");
+			}
+
 			users.add(nicole);
 			return nicole;
 		}
@@ -167,21 +188,37 @@ public enum ActionEnum implements Action {
 		public void execute() {
 			System.out.println("Emptying database...");
 			System.out.println();
-			
-			Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
+
+			final Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
 			session.query("MATCH (n) DETACH DELETE n", Collections.<String, Object> emptyMap());
-			
+
 			System.out.println();
 			System.out.println("Database empty.");
+
 		}
 	},
-	EXIT_ACTION {
+	USER_LOGIN {
+
 		@Override
 		public void execute() {
-			System.out.println("Good bye!");
-			System.exit(0);
-		}
+			final UserInput input = UserInput.singleton();
 
+			System.out.println("Enter a username");
+			final String username = input.getNextLine();
+
+			System.out.println("Enter password");
+			final String password = input.getNextLine();
+
+			final UserService service = new UserService();
+			final User user = service.login(username, password);
+			if (user == null) {
+				System.out.println("invalid username and/or password");
+				MenuSession.singleton().setFailFlag();
+			} else {
+				MenuSession.singleton().setUser(user);
+				System.out.println("Welcome " + user.getUsername());
+			}
+		}
 	};
 
 }

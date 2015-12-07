@@ -55,7 +55,10 @@ public class MenuBuilder {
 			final MenuOption pickedOption = this.findOptionByNumber(optionNumber);
 
 			pickedOption.performAction();
-
+			if (MenuSession.singleton().actionFailed()) {
+				MenuSession.singleton().resetFailFlag();
+				return this;
+			}
 			return pickedOption.menuToShowNext();
 		}
 	}
@@ -63,6 +66,7 @@ public class MenuBuilder {
 	private static MenuBuilder INSTANCE;
 	private static Menu MAIN_MENU;
 	private static Menu MANAGER_MENU;
+	private static Menu USER_MENU;
 
 	public static MenuBuilder singleton() {
 		if (INSTANCE == null) {
@@ -70,19 +74,27 @@ public class MenuBuilder {
 		}
 		return INSTANCE;
 	}
-	
+
 	public Menu mainMenu() {
 		if (MAIN_MENU == null) {
+			System.out.println("built");
 			this.buildMainMenu();
 		}
 		return MAIN_MENU;
 	}
-	
+
 	public Menu managementMenu() {
 		if (MANAGER_MENU == null) {
 			this.buildManagerMenu();
 		}
 		return MANAGER_MENU;
+	}
+
+	public Menu userMenu() {
+		if (USER_MENU == null) {
+			this.buildUserMenu();
+		}
+		return USER_MENU;
 	}
 
 	private MenuBuilder() {
@@ -92,6 +104,7 @@ public class MenuBuilder {
 	private void buildMainMenu() {
 		MAIN_MENU = MenuBuilder.singleton().new Menu("MAIN MENU", Message.MENU_DEFAULT_MESSAGE);
 		final ArrayList<MenuOption> mainMenuOptions = new ArrayList<>();
+		mainMenuOptions.add(new MenuOption("LOGIN", ActionEnum.USER_LOGIN, this.userMenu()));
 		mainMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MAIN_MENU));
 
 		MAIN_MENU.addOptionsToMenu(mainMenuOptions);
@@ -99,12 +112,23 @@ public class MenuBuilder {
 
 	private void buildManagerMenu() {
 		MANAGER_MENU = MenuBuilder.singleton().new Menu("MANAGE DATABASE", Message.MENU_DEFAULT_MESSAGE);
-		ArrayList<MenuOption> mgmtMenuOptions = new ArrayList<>();
+		final ArrayList<MenuOption> mgmtMenuOptions = new ArrayList<>();
+
 		mgmtMenuOptions.add(new MenuOption("Populate database", ActionEnum.POPULATE_DB, MANAGER_MENU));
 		mgmtMenuOptions.add(new MenuOption("Empty database", ActionEnum.DROP_ALL_DB, MANAGER_MENU));
 		mgmtMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MANAGER_MENU));
-		
+
 		MANAGER_MENU.addOptionsToMenu(mgmtMenuOptions);
+	}
+
+	private void buildUserMenu() {
+		USER_MENU = MenuBuilder.singleton().new Menu("MAIN MENU", Message.MENU_DEFAULT_MESSAGE);
+		final ArrayList<MenuOption> userMenuOptions = new ArrayList<>();
+		userMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MAIN_MENU));
+		userMenuOptions.add(new MenuOption("LOGOUT", ActionEnum.LOGOUT, MAIN_MENU));
+
+		USER_MENU.addOptionsToMenu(userMenuOptions);
+
 	}
 
 }
