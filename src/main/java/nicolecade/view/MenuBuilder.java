@@ -61,14 +61,28 @@ public class MenuBuilder {
 	}
 
 	private static MenuBuilder INSTANCE;
-
 	private static Menu MAIN_MENU;
+	private static Menu MANAGER_MENU;
 
 	public static MenuBuilder singleton() {
 		if (INSTANCE == null) {
 			INSTANCE = new MenuBuilder();
 		}
 		return INSTANCE;
+	}
+	
+	public Menu mainMenu() {
+		if (MAIN_MENU == null) {
+			this.buildMainMenu();
+		}
+		return MAIN_MENU;
+	}
+	
+	public Menu managementMenu() {
+		if (MANAGER_MENU == null) {
+			this.buildManagerMenu();
+		}
+		return MANAGER_MENU;
 	}
 
 	private MenuBuilder() {
@@ -83,11 +97,10 @@ public class MenuBuilder {
 		MAIN_MENU.addOptionsToMenu(mainMenuOptions);
 	}
 
-	public Menu mainMenu() {
-		if (MAIN_MENU == null) {
-			this.buildMainMenu();
-		}
-		return MAIN_MENU;
+	private void buildManagerMenu() {
+		MANAGER_MENU = MenuBuilder.singleton().new Menu("MANAGE DATABASE", Message.MENU_DEFAULT_MESSAGE);
+		ArrayList<Object> mgmtMenuOptions = new ArrayList<>();
+		mgmtMenuOptions.add(new MenuOption("Populate database", ActionEnum.POPULATE_DB, MANAGER_MENU));
 	}
 
 }

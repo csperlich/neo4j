@@ -25,16 +25,9 @@ public class MenuNavigator {
 
 	public void runTheApp() {
 
-		this.displayWelcomeMessage();
-
 		Menu menu = MenuBuilder.singleton().mainMenu();
-		int optionNumberFromUser;
-
-		while (true) {
-			optionNumberFromUser = this.showMenuAndGetInput(menu);
-			menu = menu.performActionByOptionNumberReturnNextMenu(optionNumberFromUser);
-			System.out.println();
-		}
+		
+		kickOffDatabaseManagement(menu);
 
 	}
 
@@ -44,5 +37,22 @@ public class MenuNavigator {
 		final String menuInput = UserInput.singleton().getNextLine();
 		final int optionNumber = Integer.parseInt(menuInput);
 		return optionNumber;
+	}
+
+	public void runDatabaseManager() {
+		Menu menu = MenuBuilder.singleton().managementMenu();
+		
+		kickOffDatabaseManagement(menu);		
+	}
+
+	private void kickOffDatabaseManagement(Menu menu) {
+		this.displayWelcomeMessage();
+		int optionNumberFromUser;
+
+		while (true) {
+			optionNumberFromUser = this.showMenuAndGetInput(menu);
+			menu = menu.performActionByOptionNumberReturnNextMenu(optionNumberFromUser);
+			System.out.println();
+		}
 	}
 }
