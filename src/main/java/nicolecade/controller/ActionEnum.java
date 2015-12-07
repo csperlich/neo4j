@@ -3,9 +3,13 @@ package nicolecade.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.neo4j.ogm.session.Session;
+import org.neo4j.ogm.session.result.Result;
 
 import nicolecade.recipe.domain.Category;
 import nicolecade.recipe.domain.Ingredient;
@@ -42,6 +46,52 @@ public enum ActionEnum implements Action {
 	FOOD_BUDDY_RECOMMENDATIONS {
 		@Override
 		public void execute() {
+			final Session session = Neo4jSessionFactory.getInstance()
+					.getNeo4jSession();
+
+			final String username = "narruda";
+			String countCondition = "count (r)";
+			String titleAttribute = "title";
+			String recipeLabel = "f";
+
+			final Result result = session.query(
+					"match (n:User {username:'" + username
+							+ "'})-[FOOD_BUDDIES]-(m:User)<-[:LEFT_BY]-(r:Review {likedIt:true})<-[:HAS_REVIEW]-("
+							+ recipeLabel + ":Recipe) return " + recipeLabel
+							+ ", " + countCondition,
+					Collections.<String, LinkedHashMap> emptyMap());
+
+			LinkedHashMap<String, Integer> recipeToVotesMap = new LinkedHashMap<>();
+
+			for (Map<String, Object> row : result) {
+				recipeToVotesMap.put(
+						(String) ((LinkedHashMap) row.get(recipeLabel))
+								.get(titleAttribute),
+						(Integer) row.get(countCondition));
+			}
+
+			System.out.println();
+			System.out.println("Recommendations from your Food Buddies:");
+			System.out.println();
+			System.out.println("    RECIPE                     #LIKES");
+
+			Set<String> recipes = recipeToVotesMap.keySet();
+			Integer currentMostVotes;
+			String currentBestRecipe = "";
+			while (!recipeToVotesMap.isEmpty()) {
+				currentMostVotes = new Integer(-1);
+				for (String thisRecipe : recipes) {
+					Integer thisNumberOfVotes = recipeToVotesMap
+							.get(thisRecipe);
+					if (thisNumberOfVotes.compareTo(currentMostVotes) > 0) {
+						currentMostVotes = thisNumberOfVotes;
+						currentBestRecipe = thisRecipe;
+					}
+				}
+				recipeToVotesMap.remove(currentBestRecipe);
+				System.out.printf("%-35s%d\n", currentBestRecipe,
+						currentMostVotes);
+			}
 
 		}
 	},
