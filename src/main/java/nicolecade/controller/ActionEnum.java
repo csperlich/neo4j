@@ -30,6 +30,7 @@ public enum ActionEnum implements Action {
 			System.exit(0);
 		}
 	},
+
 	LOGOUT {
 		@Override
 		public void execute() {
@@ -37,6 +38,14 @@ public enum ActionEnum implements Action {
 		}
 
 	},
+
+	FOOD_BUDDY_RECOMMENDATIONS {
+		@Override
+		public void execute() {
+
+		}
+	},
+
 	POPULATE_DB {
 		@Override
 		public void execute() {
@@ -57,6 +66,10 @@ public enum ActionEnum implements Action {
 			final User healthy = this.addUser(users, "health_nut", "4444");
 			final User dad = this.addUser(users, "dad_arruda");
 			final User kevin = this.addUser(users, "kevin_baconator");
+			nicole.addFoodBuddy(celeste);
+			nicole.addFoodBuddy(dad);
+			nicole.addFoodBuddy(cade);
+			nicole.addFoodBuddy(krish);
 
 			final Category starches = this.addCategory(categories, "Grains and Starches");
 			final Category dairy = this.addCategory(categories, "Dairy products");
@@ -83,6 +96,7 @@ public enum ActionEnum implements Action {
 			final Ingredient mushrooms = this.addIngredient(ingredients, produce, "Mushrooms");
 			final Ingredient egg = this.addIngredient(ingredients, protein, "Egg");
 			egg.addToCategory(dairy);
+
 			final Ingredient biBimBopSauce = this.addIngredient(ingredients, sauce, "Bi Bim Bop sauce");
 			final Ingredient zucchini = this.addIngredient(ingredients, produce, "Zucchini");
 			final Ingredient bacon = this.addIngredient(ingredients, protein, "Bacon");
@@ -105,6 +119,7 @@ public enum ActionEnum implements Action {
 					"So light and fluffy! This is the best way to make mashed potatoes.", LIKE);
 			final Review potatoReview2 = this.addReview(reviews, healthy, "Ugh, I can feel my arteries clogging.",
 					DISLIKE);
+			final Review potatoReview3 = this.addReview(reviews, cade, "I love potatoes.", LIKE);
 			final Review yogurtReview1 = this.addReview(reviews, nicole,
 					"Who knew you could make new yogurt from old yogurt?", LIKE);
 			final Review mattarPaneerReview1 = this.addReview(reviews, krish, "Very authentic!", LIKE);
@@ -112,6 +127,7 @@ public enum ActionEnum implements Action {
 			final Review mattarPaneerReview3 = this.addReview(reviews, celeste, "Too spicy for me.", DISLIKE);
 			final Review biBimBopReview1 = this.addReview(reviews, healthy, "This is actually pretty good.", LIKE);
 			final Review biBimBopReview2 = this.addReview(reviews, nicole, "Rice + egg = :)", LIKE);
+			final Review biBimBopReview3 = this.addReview(reviews, celeste, "Yum!", LIKE);
 			final Review baconJalapenosReview1 = this.addReview(reviews, healthy, "Not healthy at all!", DISLIKE);
 			final Review baconJalapenosReview2 = this.addReview(reviews, krish, "Yummmm-eee", DISLIKE);
 			final Review baconJalapenosReview3 = this.addReview(reviews, kevin, "yesyesyesyesyesyesyes", LIKE);
@@ -121,12 +137,12 @@ public enum ActionEnum implements Action {
 			final Review baconDoughnutReview1 = this.addReview(reviews, kevin, "Bacon Doughnuts for President!", LIKE);
 
 			this.addRecipe(recipes, nicole, "Mashed Potatoes", Arrays.asList(potatoes, butter, salt, pepper, milk),
-					Arrays.asList(potatoReview1, potatoReview2));
+					Arrays.asList(potatoReview1, potatoReview2, potatoReview3));
 			this.addRecipe(recipes, dad, "Homemade Yogurt", Arrays.asList(yogurt, milk), Arrays.asList(yogurtReview1));
 			this.addRecipe(recipes, dad, "Mattar Paneer", Arrays.asList(milk, lemon, tomatoes, onion, peas, cumin),
 					Arrays.asList(mattarPaneerReview1, mattarPaneerReview2, mattarPaneerReview3));
 			this.addRecipe(recipes, cade, "Bi Bim Bop", Arrays.asList(rice, mushrooms, egg, zucchini, biBimBopSauce),
-					Arrays.asList(biBimBopReview1, biBimBopReview2));
+					Arrays.asList(biBimBopReview1, biBimBopReview2, biBimBopReview3));
 			this.addRecipe(recipes, cade, "Bacon-Wrapped Cheese-Stuffed Jalepenos",
 					Arrays.asList(bacon, cheddar, jalapeno),
 					Arrays.asList(baconJalapenosReview1, baconJalapenosReview2, baconJalapenosReview3));
@@ -168,53 +184,55 @@ public enum ActionEnum implements Action {
 
 		private Recipe addRecipe(ArrayList<Recipe> recipes, User contributor, String title,
 				List<Ingredient> ingredients, List<Review> reviews) {
-			final Recipe mashedPotatoes = new Recipe();
-			mashedPotatoes.setTitle(title);
-			mashedPotatoes.setContributor(contributor);
-			mashedPotatoes.setIngredients(ingredients);
-			mashedPotatoes.setReviews(reviews);
-			recipes.add(mashedPotatoes);
-			return mashedPotatoes;
+			final Recipe recipe = new Recipe();
+			recipe.setTitle(title);
+			recipe.setContributor(contributor);
+			recipe.setIngredients(ingredients);
+			recipe.setReviews(reviews);
+			recipes.add(recipe);
+			return recipe;
 		}
 
 		private Review addReview(ArrayList<Review> reviews, User user, String comment, boolean likedIt) {
-			final Review potatoReview1 = new Review();
-			potatoReview1.setComment(comment);
-			potatoReview1.setReviewer(user);
-			potatoReview1.setLikedIt(likedIt);
-			reviews.add(potatoReview1);
-			return potatoReview1;
+			final Review review = new Review();
+			review.setComment(comment);
+			review.setReviewer(user);
+			review.setLikedIt(likedIt);
+			reviews.add(review);
+			return review;
+
 		}
 
 		private Ingredient addIngredient(ArrayList<Ingredient> ingredients, Category category, String name) {
-			final Ingredient potatoes = new Ingredient();
-			potatoes.setName(name);
-			potatoes.addToCategory(category);
-			ingredients.add(potatoes);
-			return potatoes;
+			final Ingredient ingredient = new Ingredient();
+			ingredient.setName(name);
+			ingredient.addToCategory(category);
+			ingredients.add(ingredient);
+			return ingredient;
 		}
 
 		private Category addCategory(ArrayList<Category> categories, String description) {
-			final Category starches = new Category();
-			starches.setDescription(description);
-			categories.add(starches);
-			return starches;
+			final Category category = new Category();
+			category.setDescription(description);
+			categories.add(category);
+			return category;
 		}
 
 		private User addUser(ArrayList<User> users, String... userInfo) {
-			final User nicole = new User();
-			nicole.setUsername(userInfo[0]);
+			final User user = new User();
+			user.setUsername(userInfo[0]);
 
 			if (userInfo.length == 2) {
-				nicole.setPassword(userInfo[1]);
+				user.setPassword(userInfo[1]);
 			} else {
-				nicole.setPassword("1234");
+				user.setPassword("1234");
 			}
 
-			users.add(nicole);
-			return nicole;
+			users.add(user);
+			return user;
 		}
 	},
+
 	DROP_ALL_DB {
 		@Override
 		public void execute() {
@@ -229,6 +247,7 @@ public enum ActionEnum implements Action {
 
 		}
 	},
+
 	USER_LOGIN {
 
 		@Override
