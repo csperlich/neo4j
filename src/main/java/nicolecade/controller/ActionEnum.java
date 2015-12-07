@@ -48,7 +48,7 @@ public enum ActionEnum implements Action {
 		public void execute() {
 			final Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
 
-			final String username = "narruda";
+			final String username = MenuSession.singleton().getUser().getUsername();
 			final String countCondition = "count (r)";
 			final String titleAttribute = "title";
 			final String recipeLabel = "f";
@@ -421,6 +421,35 @@ public enum ActionEnum implements Action {
 
 				System.out.printf(" %-4s  %-15s%-10s\n", (likedIt ? "like" : ""), username,
 						comment);
+			}
+		}
+	},
+	SHOW_FOOD_BUDDIES_FOR_USER {
+		@Override
+		public void execute() {
+			Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
+
+			String username = MenuSession.singleton().getUser().getUsername();
+
+			Result result = session.query(
+					"match (user:User {username:'" + username
+							+ "'})-[:FOOD_BUDDIES]-(buddy:User) return buddy",
+					Collections.<String, LinkedHashMap> emptyMap());
+
+			System.out.println();
+
+			if (!result.iterator().hasNext()) {
+				System.out.println("You have no Food Buddies! :(");
+				System.out.println();
+				return;
+			}
+
+			System.out.println("YOUR FOOD BUDDIES");
+			for (Map<String, Object> row : result) {
+				LinkedHashMap foodBuddy = (LinkedHashMap) row.get("buddy");
+				String buddyUsername = (String) foodBuddy.get("username");
+
+				System.out.println(buddyUsername);
 			}
 		}
 	},

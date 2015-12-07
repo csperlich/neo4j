@@ -139,6 +139,8 @@ public class MenuBuilder {
 		USER_MENU = MenuBuilder.singleton().new Menu("USER MENU", Message.MENU_DEFAULT_MESSAGE);
 		final ArrayList<MenuOption> userMenuOptions = new ArrayList<>();
 
+		userMenuOptions.add(new MenuOption("Show your Food Buddies",
+				ActionEnum.SHOW_FOOD_BUDDIES_FOR_USER, this.userMenu()));
 		userMenuOptions.add(new MenuOption("See recommendations from your Food Buddies",
 				ActionEnum.FOOD_BUDDY_RECOMMENDATIONS, this.userMenu()));
 		userMenuOptions.add(new MenuOption("Recipe menu", ActionEnum.NO_ACTION, this.recipeMenu()));
