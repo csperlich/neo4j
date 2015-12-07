@@ -9,7 +9,7 @@ public abstract class GenericService<T> implements Service<T> {
 
 	private static final int DEPTH_ENTITY = 1;
 	private static final int DEPTH_LIST = 0;
-	private final Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
+	protected final Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
 
 	@Override
 	public T createOrUpdate(T domainObject) {
