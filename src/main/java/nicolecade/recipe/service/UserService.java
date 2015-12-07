@@ -1,6 +1,13 @@
 package nicolecade.recipe.service;
 
+import org.neo4j.ogm.session.result.Result;
+
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import nicolecade.recipe.domain.User;
 
@@ -44,4 +51,37 @@ public class UserService extends GenericService<User> {
 			return null;
 		}
 	}
+
+	public List<String> getShortestPath(String username1, String username2) {
+		final Result result = this.session.query("MATCH p=shortestPath((u1:User {username:'" + username1
+				+ "'})-[:FOOD_BUDDIES*]-(u2:User {username:'" + username2 + "'})) RETURN p",
+				Collections.<String, LinkedHashMap> emptyMap());
+
+		final List<String> baconList = new ArrayList<String>();
+
+		final Iterator<Map<String, Object>> iterator = result.iterator();
+		if (!iterator.hasNext()) {
+			return baconList;
+		}
+
+		final ArrayList resultList = (ArrayList) (iterator.next().get("p"));
+		for (int i = 0; i < resultList.size(); i++) {
+			final LinkedHashMap resultItemAttributeMap = (LinkedHashMap) resultList.get(i);
+			final String username = (String) resultItemAttributeMap.get("username");
+			if (username != null) {
+				baconList.add(username);
+			}
+		}
+
+		return baconList;
+	}
+
+	public User mostLikesForRecipeWithIngredient(String ingredient) {
+		final User biggestLiker = this.session.queryForObject(User.class,
+				"match (user:User)<-[:LEFT_BY]-(review:Review {likedIt:true})<-[r:HAS_REVIEW]-(recipe:Recipe)-->(ingredient:Ingredient {name:'"
+						+ ingredient + "'}) return user, count(r) as likes order by likes desc limit 1",
+				Collections.<String, Object> emptyMap());
+		return biggestLiker;
+	}
+
 }

@@ -112,25 +112,19 @@ public class MenuBuilder {
 	private void buildMainMenu() {
 		MAIN_MENU = MenuBuilder.singleton().new Menu("MAIN MENU", Message.MENU_DEFAULT_MESSAGE);
 		final ArrayList<MenuOption> mainMenuOptions = new ArrayList<>();
-
-		mainMenuOptions.add(new MenuOption("Log in", ActionEnum.USER_LOGIN, this.userMenu()));
-		mainMenuOptions
-				.add(new MenuOption("Register", ActionEnum.USER_REGISTRATION, this.userMenu()));
-		mainMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, this.mainMenu()));
+		mainMenuOptions.add(new MenuOption("LOGIN", ActionEnum.USER_LOGIN, this.userMenu()));
+		mainMenuOptions.add(new MenuOption("REGISTER", ActionEnum.USER_REGISTRATION, this.userMenu()));
+		mainMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MAIN_MENU));
 
 		MAIN_MENU.addOptionsToMenu(mainMenuOptions);
 	}
 
 	private void buildManagerMenu() {
-		MANAGER_MENU = MenuBuilder.singleton().new Menu("MANAGE DATABASE",
-				Message.MENU_DEFAULT_MESSAGE);
+		MANAGER_MENU = MenuBuilder.singleton().new Menu("MANAGE DATABASE", Message.MENU_DEFAULT_MESSAGE);
 		final ArrayList<MenuOption> mgmtMenuOptions = new ArrayList<>();
-
-		mgmtMenuOptions.add(
-				new MenuOption("Populate database", ActionEnum.POPULATE_DB, this.managementMenu()));
-		mgmtMenuOptions.add(
-				new MenuOption("Empty database", ActionEnum.DROP_ALL_DB, this.managementMenu()));
-		mgmtMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, this.managementMenu()));
+		mgmtMenuOptions.add(new MenuOption("Populate database", ActionEnum.POPULATE_DB, MANAGER_MENU));
+		mgmtMenuOptions.add(new MenuOption("Empty database", ActionEnum.DROP_ALL_DB, MANAGER_MENU));
+		mgmtMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MANAGER_MENU));
 
 		MANAGER_MENU.addOptionsToMenu(mgmtMenuOptions);
 	}
@@ -138,12 +132,12 @@ public class MenuBuilder {
 	private void buildUserMenu() {
 		USER_MENU = MenuBuilder.singleton().new Menu("USER MENU", Message.MENU_DEFAULT_MESSAGE);
 		final ArrayList<MenuOption> userMenuOptions = new ArrayList<>();
-
-		userMenuOptions.add(new MenuOption("Show your Food Buddies",
-				ActionEnum.SHOW_FOOD_BUDDIES_FOR_USER, this.userMenu()));
+		userMenuOptions
+				.add(new MenuOption("Show your Food Buddies", ActionEnum.SHOW_FOOD_BUDDIES_FOR_USER, this.userMenu()));
 		userMenuOptions.add(new MenuOption("See recommendations from your Food Buddies",
 				ActionEnum.FOOD_BUDDY_RECOMMENDATIONS, this.userMenu()));
 		userMenuOptions.add(new MenuOption("Recipe menu", ActionEnum.NO_ACTION, this.recipeMenu()));
+		userMenuOptions.add(new MenuOption("Get Bacon Path", ActionEnum.GET_BACON_PATH, USER_MENU));
 		userMenuOptions.add(new MenuOption("Log out", ActionEnum.LOGOUT, this.mainMenu()));
 		userMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, this.mainMenu()));
 
@@ -153,12 +147,11 @@ public class MenuBuilder {
 
 	private void buildRecipeMenu() {
 		RECIPE_MENU = MenuBuilder.singleton().new Menu("RECIPES", Message.MENU_DEFAULT_MESSAGE);
-		ArrayList<MenuOption> recipeMenuOptions = new ArrayList<>();
+		final ArrayList<MenuOption> recipeMenuOptions = new ArrayList<>();
 
-		recipeMenuOptions.add(
-				new MenuOption("Show all recipes", ActionEnum.SHOW_ALL_RECIPES, this.recipeMenu()));
-		recipeMenuOptions.add(new MenuOption("See reviews for a recipe",
-				ActionEnum.SHOW_REVIEWS_FOR_RECIPE, this.recipeMenu()));
+		recipeMenuOptions.add(new MenuOption("Show all recipes", ActionEnum.SHOW_ALL_RECIPES, this.recipeMenu()));
+		recipeMenuOptions
+				.add(new MenuOption("See reviews for a recipe", ActionEnum.SHOW_REVIEWS_FOR_RECIPE, this.recipeMenu()));
 		recipeMenuOptions.add(new MenuOption("Go back", ActionEnum.NO_ACTION, this.userMenu()));
 
 		RECIPE_MENU.addOptionsToMenu(recipeMenuOptions);
