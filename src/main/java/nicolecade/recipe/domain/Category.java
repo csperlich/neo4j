@@ -9,11 +9,11 @@ public class Category extends DomainObject {
 	@Property(name = "description")
 	private String description;
 	
-	public void setName(String name) {
-		this.description = name;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
-	public String getName() {
+	public String getDescription() {
 		return description;
 	}
 	

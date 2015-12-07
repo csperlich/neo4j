@@ -16,7 +16,7 @@ import org.neo4j.ogm.session.SessionFactory;
 public class Neo4jSessionFactory {
 
 	private static Neo4jSessionFactory factory = new Neo4jSessionFactory();
-	private static final String PASSWORD = "neo4j";
+	private static final String PASSWORD = "neo";
 	private final static SessionFactory sessionFactory = new SessionFactory("nicolecade.movie.domain");
 	private static final String USERNAME = "neo4j";
 

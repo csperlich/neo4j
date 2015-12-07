@@ -1,67 +1,73 @@
 package nicolecade.controller;
 
-import java.text.ParseException;
-import java.util.Date;
+import java.util.Arrays;
 
-import nicolecade.movie.domain.DomainObject;
-import nicolecade.movie.domain.Person;
-import nicolecade.movie.service.CustomService;
-import nicolecade.movie.service.PersonServiceImpl;
-import nicolecade.util.io.UserInput;
+import nicolecade.recipe.domain.Category;
+import nicolecade.recipe.domain.Ingredient;
+import nicolecade.recipe.domain.Recipe;
+import nicolecade.recipe.domain.Review;
+import nicolecade.recipe.domain.User;
+import nicolecade.recipe.service.UserService;
 
 public enum ActionEnum implements Action {
-	ADD_PERSON {
+	
+	POPULATE_DB {
 		@Override
 		public void execute() {
-			System.out.print("Enter Name: ");
-			final String name = UserInput.singleton().getNextLine();
+			User nicole = new User();
+			nicole.setUsername("narruda");
+			
+			User cade = new User();
+			cade.setUsername("csperlich");
+			
+			User krish = new User();
+			krish.setUsername("knarayanan");
+			
+			UserService userService = new UserService();
+			userService.createOrUpdate(nicole);
+			userService.createOrUpdate(cade);
+			userService.createOrUpdate(krish);
 
-			Date birthday = null;
-			boolean badDate = true;
-			while (badDate) {
-				try {
-					System.out.print("Enter Birthday (" + DomainObject.DATE_FORMAT + "): ");
-					birthday = DomainObject.dateFormatter.parse(UserInput.singleton().getNextLine());
-					badDate = false;
-				} catch (final ParseException e) {
-					System.out.println("Bad date, try again.");
-				}
-			}
-			final Person person = new Person();
-			person.setName(name);
-			person.setBirthday(123);
+			Category starches = new Category();
+			starches.setDescription("Starches");
+			
+			Category dairy = new Category();
+			dairy.setDescription("Dairy");
+			
+			Category seasonings = new Category();
+			seasonings.setDescription("Herbs, spices, and seasonings");
+			
+			Ingredient potatoes = new Ingredient();
+			potatoes.setName("Potatoes");
+			potatoes.addToCategory(starches);
+			
+			Ingredient butter = new Ingredient();
+			butter.setName("Butter");
+			butter.addToCategory(dairy);
+			
+			Ingredient salt = new Ingredient();
+			salt.setName("Salt");
+			salt.addToCategory(seasonings);
 
-			final PersonServiceImpl personService = new PersonServiceImpl();
-			personService.createOrUpdate(person);
+			Ingredient pepper = new Ingredient();
+			pepper.setName("Pepper");
+			pepper.addToCategory(seasonings);
+			
+			Ingredient cream = new Ingredient();
+			cream.setName("Cream");
+			cream.addToCategory(dairy);
+			
+			Review review1 = new Review();
+			review1.setComment("So light and fluffy! This is the best way to make mashed potatoes.");
+			
+			Review review2 = new Review();
+			review2.setComment("Ugh, I can feel my arteries clogging.");
+
+			Recipe mashedPotatoes = new Recipe();
+			mashedPotatoes.setContributor(nicole);
+			mashedPotatoes.setIngredients(Arrays.asList(potatoes, butter, salt, pepper, cream));
+			mashedPotatoes.setReviews(Arrays.asList(review1, review2));
 		}
-	},
-	CUSTOM_GET_IDS {
-
-		@Override
-		public void execute() {
-			final CustomService service = new CustomService();
-			service.customGetIdsForMatrixActors();
-		}
-
-	},
-	CUSTOM_GET_PERSONS {
-
-		@Override
-		public void execute() {
-			final CustomService service = new CustomService();
-			service.customGetPersons();
-		}
-
-	},
-	CUSTOM_SHORTEST_PATH {
-
-		@Override
-		public void execute() {
-			final CustomService service = new CustomService();
-			service.shortestPath();
-
-		}
-
 	},
 	EXIT_ACTION {
 		@Override
