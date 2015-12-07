@@ -35,6 +35,15 @@ public enum ActionEnum implements Action {
 			personService.createOrUpdate(person);
 		}
 	},
+	CUSTOM_GET_IDS {
+
+		@Override
+		public void execute() {
+			final CustomService service = new CustomService();
+			service.customGetIdsForMatrixActors();
+		}
+
+	},
 	CUSTOM_GET_PERSONS {
 
 		@Override

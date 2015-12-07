@@ -12,6 +12,15 @@ public class CustomService {
 	// Create the session
 	Session session = Neo4jSessionFactory.getInstance().getNeo4jSession();
 
+	public void customGetIdsForMatrixActors() {
+		final Iterable<Map<String, Object>> result = this.session.query(
+				"MATCH (a:Person)-->(:Movie {title:\"The Matrix\"}) return ID(a), a",
+				Collections.<String, Object> emptyMap());
+		for (final Map<String, Object> row : result) {
+			System.out.println(row);
+		}
+	}
+
 	public void customGetPersons() {
 		final Iterable<Person> person = this.session.query(Person.class, "MATCH (a:Person) RETURN a",
 				Collections.<String, Object> emptyMap());
@@ -25,7 +34,7 @@ public class CustomService {
 				"MATCH p=shortestPath((bacon:Person {name:\"Kevin Bacon\"})-[*]-(meg:Person {name:\"Meg Ryan\"})) RETURN p",
 				Collections.<String, Object> emptyMap());
 		for (final Map<String, Object> row : result) {
-			System.out.println(row.get(row.keySet().iterator().next()));
+			System.out.println(row);
 		}
 	}
 }

@@ -81,6 +81,7 @@ public class MenuBuilder {
 		mainMenuOptions.add(new MenuOption("ADD PERSON", ActionEnum.ADD_PERSON, MAIN_MENU));
 		mainMenuOptions.add(new MenuOption("CUSTOM GET PERSONS", ActionEnum.CUSTOM_GET_PERSONS, MAIN_MENU));
 		mainMenuOptions.add(new MenuOption("SHORTEST PATH", ActionEnum.CUSTOM_SHORTEST_PATH, MAIN_MENU));
+		mainMenuOptions.add(new MenuOption("CUSTOM GET IDS", ActionEnum.CUSTOM_GET_IDS, MAIN_MENU));
 		mainMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MAIN_MENU));
 
 		MAIN_MENU.addOptionsToMenu(mainMenuOptions);
