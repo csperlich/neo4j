@@ -27,7 +27,7 @@ public class MenuNavigator {
 
 		Menu menu = MenuBuilder.singleton().mainMenu();
 		
-		kickOffDatabaseManagement(menu);
+		kickOffMenuNavigation(menu);
 
 	}
 
@@ -42,10 +42,10 @@ public class MenuNavigator {
 	public void runDatabaseManager() {
 		Menu menu = MenuBuilder.singleton().managementMenu();
 		
-		kickOffDatabaseManagement(menu);		
+		kickOffMenuNavigation(menu);		
 	}
 
-	private void kickOffDatabaseManagement(Menu menu) {
+	private void kickOffMenuNavigation(Menu menu) {
 		this.displayWelcomeMessage();
 		int optionNumberFromUser;
 

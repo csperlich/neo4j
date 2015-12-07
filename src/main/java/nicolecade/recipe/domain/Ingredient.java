@@ -1,5 +1,6 @@
 package nicolecade.recipe.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -14,6 +15,10 @@ public class Ingredient extends DomainObject {
 	
 	@Relationship(type = "BELONGS_TO", direction = Relationship.OUTGOING)
 	private List<Category> categories;
+	
+	public Ingredient() {
+		categories = new ArrayList<>();
+	}
 	
 	public void setName(String name) {
 		this.name = name;

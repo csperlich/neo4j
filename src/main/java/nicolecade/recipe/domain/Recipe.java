@@ -1,5 +1,6 @@
 package nicolecade.recipe.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -22,7 +23,8 @@ public class Recipe extends DomainObject {
 	private User contributor;
 	
 	public Recipe() {
-		
+		this.ingredients = new ArrayList<>();
+		this.reviews = new ArrayList<>();
 	}
 	
 	public void setTitle(String title) {

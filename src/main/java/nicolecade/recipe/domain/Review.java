@@ -18,7 +18,7 @@ public class Review extends DomainObject {
 	private Date date;
 	
 	@Relationship(type = "LEFT_BY", direction = Relationship.OUTGOING)
-	private User user;
+	private User reviewer;
 	
 	public void setComment(String comment) {
 		this.comment = comment;
@@ -26,5 +26,21 @@ public class Review extends DomainObject {
 	
 	public String getComment() {
 		return comment;
+	}
+	
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	
+	public Date getDate() {
+		return date;
+	}
+	
+	public void setReviewer(User reviewer) {
+		this.reviewer = reviewer;
+	}
+	
+	public User getReviewer() {
+		return reviewer;
 	}
 }
