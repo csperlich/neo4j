@@ -13,7 +13,7 @@ public abstract class DomainObject {
 	public final static DateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
 
 	@GraphId
-	private Long id;
+	protected Long id;
 
 	@Override
 	public boolean equals(Object obj) {

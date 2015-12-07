@@ -3,17 +3,14 @@ package nicolecade.movie.domain;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
-import org.neo4j.ogm.annotation.typeconversion.DateString;
 
-import java.util.Date;
 import java.util.List;
 
 @NodeEntity
 public class Person extends DomainObject {
 
-	@Property(name = "birthday")
-	@DateString("yyyy-MM-dd")
-	Date birthday;
+	@Property(name = "born")
+	int birthyear;
 
 	@Relationship(type = "ACTED_IN", direction = Relationship.OUTGOING)
 	private List<ActedIn> moviesActedIn;
@@ -42,8 +39,8 @@ public class Person extends DomainObject {
 		this.moviesWritten.add(movie);
 	}
 
-	public Date getBirthday() {
-		return this.birthday;
+	public int getBirthday() {
+		return this.birthyear;
 	}
 
 	public List<ActedIn> getMoviesActedIn() {
@@ -66,8 +63,8 @@ public class Person extends DomainObject {
 		return this.moviesActedIn;
 	}
 
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
+	public void setBirthday(int birthday) {
+		this.birthyear = birthday;
 	}
 
 	public void setMoviesActedIn(List<ActedIn> moviesActedIn) {
@@ -88,5 +85,12 @@ public class Person extends DomainObject {
 
 	public void setRolesPlayed(List<ActedIn> rolesPlayed) {
 		this.moviesActedIn = rolesPlayed;
+	}
+
+	@Override
+	public String toString() {
+		return "Person [birthday=" + this.birthyear + ", id=" + this.id + ", moviesActedIn=" + this.moviesActedIn
+				+ ", moviesDirected=" + this.moviesDirected + ", moviesWritten=" + this.moviesWritten + ", name="
+				+ this.name + "]";
 	}
 }

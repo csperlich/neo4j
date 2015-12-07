@@ -79,6 +79,8 @@ public class MenuBuilder {
 		MAIN_MENU = MenuBuilder.singleton().new Menu("MAIN MENU", Message.MENU_DEFAULT_MESSAGE);
 		final ArrayList<MenuOption> mainMenuOptions = new ArrayList<>();
 		mainMenuOptions.add(new MenuOption("ADD PERSON", ActionEnum.ADD_PERSON, MAIN_MENU));
+		mainMenuOptions.add(new MenuOption("CUSTOM GET PERSONS", ActionEnum.CUSTOM_GET_PERSONS, MAIN_MENU));
+		mainMenuOptions.add(new MenuOption("SHORTEST PATH", ActionEnum.CUSTOM_SHORTEST_PATH, MAIN_MENU));
 		mainMenuOptions.add(new MenuOption("EXIT", ActionEnum.EXIT_ACTION, MAIN_MENU));
 
 		MAIN_MENU.addOptionsToMenu(mainMenuOptions);

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import nicolecade.movie.domain.DomainObject;
 import nicolecade.movie.domain.Person;
+import nicolecade.movie.service.CustomService;
 import nicolecade.movie.service.PersonServiceImpl;
 import nicolecade.util.io.UserInput;
 
@@ -28,11 +29,30 @@ public enum ActionEnum implements Action {
 			}
 			final Person person = new Person();
 			person.setName(name);
-			person.setBirthday(birthday);
+			person.setBirthday(123);
 
 			final PersonServiceImpl personService = new PersonServiceImpl();
 			personService.createOrUpdate(person);
 		}
+	},
+	CUSTOM_GET_PERSONS {
+
+		@Override
+		public void execute() {
+			final CustomService service = new CustomService();
+			service.customGetPersons();
+		}
+
+	},
+	CUSTOM_SHORTEST_PATH {
+
+		@Override
+		public void execute() {
+			final CustomService service = new CustomService();
+			service.shortestPath();
+
+		}
+
 	},
 	EXIT_ACTION {
 		@Override
