@@ -13,7 +13,7 @@ public class UserService extends GenericService<User> {
 
 	/**
 	 * Attempts to find the user with the supplied username and password. As we
-	 * add relatinships to the User type, we may have to change the way this
+	 * add relationships to the User type, we may have to change the way this
 	 * method works as all relationships may not be retrieved with the query
 	 * within.
 	 *

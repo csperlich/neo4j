@@ -56,12 +56,15 @@ public enum ActionEnum implements Action {
 			final User celeste = this.addUser(users, "carruda");
 			final User healthy = this.addUser(users, "health_nut", "4444");
 			final User dad = this.addUser(users, "dad_arruda");
+			final User kevin = this.addUser(users, "kevin_baconator");
 
-			final Category starches = this.addCategory(categories, "Starches");
+			final Category starches = this.addCategory(categories, "Grains and Starches");
 			final Category dairy = this.addCategory(categories, "Dairy products");
 			final Category seasonings = this.addCategory(categories, "Herbs, spices, and seasonings");
 			final Category produce = this.addCategory(categories, "Fruits and vegetables");
 			final Category protein = this.addCategory(categories, "Protein");
+			final Category sauce = this.addCategory(categories, "Condiments, Oils, and Sauces");
+			final Category pastries = this.addCategory(categories, "Pastries");
 
 			final Ingredient potatoes = this.addIngredient(ingredients, starches, "Potatoes");
 			potatoes.addToCategory(produce);
@@ -80,8 +83,20 @@ public enum ActionEnum implements Action {
 			final Ingredient mushrooms = this.addIngredient(ingredients, produce, "Mushrooms");
 			final Ingredient egg = this.addIngredient(ingredients, protein, "Egg");
 			egg.addToCategory(dairy);
-			final Ingredient biBimBopSauce = this.addIngredient(ingredients, seasonings, "Bi Bim Bop sauce");
+			final Ingredient biBimBopSauce = this.addIngredient(ingredients, sauce, "Bi Bim Bop sauce");
 			final Ingredient zucchini = this.addIngredient(ingredients, produce, "Zucchini");
+			final Ingredient bacon = this.addIngredient(ingredients, protein, "Bacon");
+			final Ingredient jalapeno = this.addIngredient(ingredients, produce, "Jalepeno");
+			final Ingredient cheddar = this.addIngredient(ingredients, dairy, "Cheddar Cheese");
+			final Ingredient lettuce = this.addIngredient(ingredients, produce, "Lettuce");
+			final Ingredient tomato = this.addIngredient(ingredients, produce, "Tomato");
+			final Ingredient bread = this.addIngredient(ingredients, starches, "Bread");
+			final Ingredient mayo = this.addIngredient(ingredients, sauce, "Mayonnaise");
+			mayo.addToCategory(dairy);
+			final Ingredient pasta = this.addIngredient(ingredients, starches, "Pasta");
+			final Ingredient oliveOil = this.addIngredient(ingredients, sauce, "Olive Oil");
+			final Ingredient garlic = this.addIngredient(ingredients, produce, "Garlic");
+			final Ingredient dooughnut = this.addIngredient(ingredients, pastries, "Doughnut");
 
 			final boolean LIKE = true;
 			final boolean DISLIKE = false;
@@ -97,6 +112,13 @@ public enum ActionEnum implements Action {
 			final Review mattarPaneerReview3 = this.addReview(reviews, celeste, "Too spicy for me.", DISLIKE);
 			final Review biBimBopReview1 = this.addReview(reviews, healthy, "This is actually pretty good.", LIKE);
 			final Review biBimBopReview2 = this.addReview(reviews, nicole, "Rice + egg = :)", LIKE);
+			final Review baconJalapenosReview1 = this.addReview(reviews, healthy, "Not healthy at all!", DISLIKE);
+			final Review baconJalapenosReview2 = this.addReview(reviews, krish, "Yummmm-eee", DISLIKE);
+			final Review baconJalapenosReview3 = this.addReview(reviews, kevin, "yesyesyesyesyesyesyes", LIKE);
+			final Review bltReview1 = this.addReview(reviews, cade, "Simple, yet effective", LIKE);
+			final Review bltReview2 = this.addReview(reviews, celeste, "A classic.", LIKE);
+			final Review baconCarbonaraReview1 = this.addReview(reviews, kevin, "You had me at \"Bacon\"", LIKE);
+			final Review baconDoughnutReview1 = this.addReview(reviews, kevin, "Bacon Doughnuts for President!", LIKE);
 
 			this.addRecipe(recipes, nicole, "Mashed Potatoes", Arrays.asList(potatoes, butter, salt, pepper, milk),
 					Arrays.asList(potatoReview1, potatoReview2));
@@ -105,6 +127,15 @@ public enum ActionEnum implements Action {
 					Arrays.asList(mattarPaneerReview1, mattarPaneerReview2, mattarPaneerReview3));
 			this.addRecipe(recipes, cade, "Bi Bim Bop", Arrays.asList(rice, mushrooms, egg, zucchini, biBimBopSauce),
 					Arrays.asList(biBimBopReview1, biBimBopReview2));
+			this.addRecipe(recipes, cade, "Bacon-Wrapped Cheese-Stuffed Jalepenos",
+					Arrays.asList(bacon, cheddar, jalapeno),
+					Arrays.asList(baconJalapenosReview1, baconJalapenosReview2, baconJalapenosReview3));
+			this.addRecipe(recipes, kevin, "BLT", Arrays.asList(bacon, lettuce, tomato, bread, mayo),
+					Arrays.asList(bltReview1, bltReview2));
+			this.addRecipe(recipes, dad, "Bacon Carbonara", Arrays.asList(pasta, egg, bacon, oliveOil, garlic),
+					Arrays.asList(baconCarbonaraReview1, baconJalapenosReview2));
+			this.addRecipe(recipes, celeste, "Glazed Donut with Bacon", Arrays.asList(dooughnut, bacon),
+					Arrays.asList(baconDoughnutReview1));
 
 			final UserService userService = new UserService();
 			for (final User user : users) {
@@ -150,6 +181,7 @@ public enum ActionEnum implements Action {
 			final Review potatoReview1 = new Review();
 			potatoReview1.setComment(comment);
 			potatoReview1.setReviewer(user);
+			potatoReview1.setLikedIt(likedIt);
 			reviews.add(potatoReview1);
 			return potatoReview1;
 		}
